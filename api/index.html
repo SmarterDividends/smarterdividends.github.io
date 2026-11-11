@@ -1,0 +1,31 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Free dividend API | SmarterDividends Developers</title><meta name="description" content="Dividend data and developer resources from SmarterDividends."><link rel="stylesheet" href="/style.css"><link rel="icon" href="/icon.png"></head><body><header><a href="/"><img src="/icon.png" width="36" height="36" alt="">SmarterDividends</a><nav aria-label="Developer resources"><a href="/api/">API</a><a href="/mcp/">AI assistants</a><a href="/datasets/">Datasets</a><a href="/chrome-extension/">Extension</a></nav></header><main><p class="eyebrow">API quickstart</p><h1>A ticker in.<br>Dividend facts out.</h1><p>No API key or account. CORS is enabled. Limit requests to 60 per minute per IP and cache responses.</p><h2>Try a stock</h2><pre>curl --fail 'https://smarterdividends.com/api/v1/stocks/KO'</pre><h2>Python</h2><pre>import requests
+r = requests.get("https://smarterdividends.com/api/v1/stocks/KO", timeout=20)
+r.raise_for_status()
+print(r.json()["dividend"])</pre><h2>JavaScript</h2><pre>const r = await fetch("https://smarterdividends.com/api/v1/stocks/KO");
+if (!r.ok) throw new Error(`API returned ${r.status}`);
+console.log((await r.json()).dividend);</pre><h2>Google Sheets</h2><pre>=IMPORTDATA("https://smarterdividends.com/api/v1/stocks/KO?format=csv")</pre><h2>Other endpoints</h2><pre>GET /api/v1/ex-dividend/2026-12-01
+GET /api/v1/dividend-changes?week=2026-11-09</pre><p>The ex-dividend response includes last_day_to_buy using the market holiday calendar. Without week, dividend-changes returns the latest seven days.</p><h2>A real KO response</h2><p>Illustrative snapshot, fetched November 11, 2026. Read as_of in every response.</p><pre>{
+  &quot;symbol&quot;: &quot;KO&quot;,
+  &quot;as_of&quot;: &quot;2026-11-11&quot;,
+  &quot;dividend&quot;: {
+    &quot;forward_yield&quot;: 0.0219,
+    &quot;annual_amount&quot;: 2.12,
+    &quot;frequency&quot;: &quot;quarterly&quot;,
+    &quot;payout_ratio&quot;: 0.6195,
+    &quot;growth_streak_years&quot;: 55,
+    &quot;five_year_growth_rate&quot;: 0.0446,
+    &quot;next_ex_date&quot;: &quot;2026-12-01&quot;,
+    &quot;next_pay_date&quot;: &quot;2026-12-15&quot;,
+    &quot;last_payment&quot;: {
+      &quot;ex_date&quot;: &quot;2026-09-15&quot;,
+      &quot;pay_date&quot;: &quot;2026-10-01&quot;,
+      &quot;amount&quot;: 0.53
+    }
+  },
+  &quot;safety&quot;: {
+    &quot;score&quot;: 92,
+    &quot;grade&quot;: &quot;A&quot;,
+    &quot;ever_cut&quot;: false,
+    &quot;last_cut_year&quot;: null
+  }
+}</pre><h2>Read the fields correctly</h2><table><tr><th>Field</th><th>Meaning</th></tr><tr><td><code>dividend.forward_yield</code></td><td>Indicated yield as a fraction: 0.03 means 3%.</td></tr><tr><td><code>dividend.annual_amount</code></td><td>Indicated annual dividend per share, USD.</td></tr><tr><td><code>dividend.next_ex_date / next_pay_date</code></td><td>ISO dates; null means unavailable, not a predicted date.</td></tr><tr><td><code>dividend.payout_ratio</code></td><td>Fraction; may be null, especially for funds.</td></tr><tr><td><code>dividend.growth_streak_years</code></td><td>Recorded consecutive years of dividend growth.</td></tr><tr><td><code>safety.grade / score</code></td><td>Model grade and score; not a guarantee.</td></tr><tr><td><code>changes[].pct_change</code></td><td>Fractional change from the preceding classified payment.</td></tr><tr><td><code>as_of</code></td><td>Date of the underlying snapshot.</td></tr></table><p><a href="https://smarterdividends.com/dividend-api?utm_source=github&utm_medium=referral&utm_campaign=developer-hub">Full API documentation</a>. Runnable portfolio and weekly-change examples will be published with the source release.</p></main><footer>Data: <a href="https://smarterdividends.com/?utm_source=github&utm_medium=referral&utm_campaign=developer-hub">SmarterDividends</a> · <a href="mailto:hello@smarterdividends.com">hello@smarterdividends.com</a><p>Not investment advice. Past results don't predict future returns.</p></footer></body></html>
